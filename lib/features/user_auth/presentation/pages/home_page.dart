@@ -1,12 +1,11 @@
-import 'package:cbo_report/report_repo.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:cbo_report/report_controller.dart';
 import 'package:cbo_report/report_model.dart';
 import 'package:get/get.dart';
 import '../../../../global/common/toast.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fl_chart/fl_chart.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -47,7 +46,7 @@ class _HomePageState extends State<HomePage> {
                 showToast(message: "Successfully signed out");
               },
               child: IconButton(
-                icon: Icon(
+                icon: const Icon(
                   Icons.logout_rounded,
                   color: Colors.redAccent,
                 ),
@@ -61,7 +60,7 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
         body: Container(
-          color: Color.fromARGB(255, 10, 184, 239),
+          color: const Color.fromARGB(255, 10, 184, 239),
           child: FutureBuilder(
             future: controller.getReportData(),
             builder: (context, snapshat) {
@@ -287,7 +286,7 @@ class _HomePageState extends State<HomePage> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
+                              const Text(
                                 'Cash',
                                 style: TextStyle(
                                   fontSize: 16,
@@ -295,14 +294,14 @@ class _HomePageState extends State<HomePage> {
                                   color: Colors.black,
                                 ),
                               ),
-                              SizedBox(height: 10),
+                              const SizedBox(height: 10),
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
                                   Row(
                                     children: [
-                                      Text(
+                                      const Text(
                                         'No. Debit = ',
                                         style: TextStyle(
                                           color:
@@ -313,7 +312,7 @@ class _HomePageState extends State<HomePage> {
                                       ),
                                       Text(
                                         reportModel.noDebit,
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           color:
                                               Color.fromARGB(255, 10, 184, 239),
                                         ),
@@ -322,7 +321,7 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                   Row(
                                     children: [
-                                      Text(
+                                      const Text(
                                         'Amount = ',
                                         style: TextStyle(
                                           color:
@@ -333,7 +332,7 @@ class _HomePageState extends State<HomePage> {
                                       ),
                                       Text(
                                         reportModel.ttlDrAmt,
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           color:
                                               Color.fromARGB(255, 10, 184, 239),
                                         ),
@@ -342,14 +341,14 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                 ],
                               ),
-                              SizedBox(height: 10),
+                              const SizedBox(height: 10),
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
                                   Row(
                                     children: [
-                                      Text(
+                                      const Text(
                                         'No. Credit = ',
                                         style: TextStyle(
                                           color:
@@ -360,7 +359,7 @@ class _HomePageState extends State<HomePage> {
                                       ),
                                       Text(
                                         reportModel.noCredit,
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           color:
                                               Color.fromARGB(255, 10, 184, 239),
                                         ),
@@ -369,7 +368,7 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                   Row(
                                     children: [
-                                      Text(
+                                      const Text(
                                         'Amount = ',
                                         style: TextStyle(
                                           color:
@@ -380,7 +379,7 @@ class _HomePageState extends State<HomePage> {
                                       ),
                                       Text(
                                         reportModel.ttlCrAmt,
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           color:
                                               Color.fromARGB(255, 10, 184, 239),
                                         ),
@@ -395,7 +394,7 @@ class _HomePageState extends State<HomePage> {
                                 children: [
                                   Row(
                                     children: [
-                                      Text(
+                                      const Text(
                                         'Amount Diff = ',
                                         style: TextStyle(
                                           color:
@@ -406,7 +405,7 @@ class _HomePageState extends State<HomePage> {
                                       ),
                                       Text(
                                         reportModel.noCredit,
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           color:
                                               Color.fromARGB(255, 10, 184, 239),
                                         ),
@@ -542,7 +541,7 @@ class _HomePageState extends State<HomePage> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
+                              const Text(
                                 'Non Cash',
                                 style: TextStyle(
                                   fontSize: 24,
@@ -550,14 +549,14 @@ class _HomePageState extends State<HomePage> {
                                   color: Colors.black,
                                 ),
                               ),
-                              SizedBox(height: 10),
+                              const SizedBox(height: 10),
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
                                   Column(
                                     children: [
-                                      Text(
+                                      const Text(
                                         'No. TR',
                                         style: TextStyle(
                                           color:
@@ -568,7 +567,7 @@ class _HomePageState extends State<HomePage> {
                                       ),
                                       Text(
                                         reportModel.noTr,
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           color:
                                               Color.fromARGB(255, 10, 184, 239),
                                         ),
@@ -577,7 +576,7 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                   Column(
                                     children: [
-                                      Text(
+                                      const Text(
                                         'TTL Amount',
                                         style: TextStyle(
                                           color:
@@ -588,7 +587,7 @@ class _HomePageState extends State<HomePage> {
                                       ),
                                       Text(
                                         reportModel.ttlAmount,
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           color:
                                               Color.fromARGB(255, 10, 184, 239),
                                         ),

@@ -1,3 +1,5 @@
+import 'package:cbo_report/features/user_auth/presentation/pages/detail_page.dart';
+import 'package:cbo_report/features/user_auth/presentation/pages/sample.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:cbo_report/features/app/splash-screen/splash_screen.dart';
@@ -23,9 +25,9 @@ class MyApp extends StatelessWidget {
       title: 'CBO Report',
       routes: {
         '/': (context) => const SplashScreen(
-              child: LoginPage(),
+              child: LineChartSample2(),
             ),
-        '/login': (context) => const LoginPage(),
+        '/login': (context) => const LineChartSample2(),
         '/home': (context) => const HomePage(),
       },
     );
