@@ -1,7 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 
 class LineTitles {
-  static getTitleData() => FlTitlesData(
+  static getTitleData() => const FlTitlesData(
         show: true,
         // bottomTitles: AxisTitles(
         //     sideTitles: SideTitles(

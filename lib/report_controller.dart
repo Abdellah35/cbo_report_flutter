@@ -7,7 +7,7 @@ class ReportController extends GetxController {
   final _reportRepo = Get.put(ReportRepository());
 
   getReportData() {
-    String id = "b44xiw9gHWPzjQVMPdu2";
+    String id = "b44xiw9gHWPzjQVMPyi6";
 
     return _reportRepo.getReportDetails(id);
   }

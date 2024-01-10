@@ -9,7 +9,7 @@ class ReportRepository extends GetxService {
 
   Future<ReportModel> getReportDetails(String id) async {
     final snapshot =
-        await _db.collection("cbo-daily").where('id', isEqualTo: id).get();
+        await _db.collection("daily-report").where('id', isEqualTo: id).get();
     final userData =
         snapshot.docs.map((e) => ReportModel.fromSnapshot(e)).single;
 
