@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cbo_report/report_model.dart';
+import 'package:intl/intl.dart';
 import '../../../../global/common/toast.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -14,15 +15,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-// Get a reference to the Firestore instance
-  final Stream<DocumentSnapshot<Map<String, dynamic>>> _reportStream =
-      FirebaseFirestore.instance
-          .collection('daily-report')
-          .doc("b44xiw9gHWPzjQVMPyi6")
-          .snapshots();
-  Stream documentStream =
-      FirebaseFirestore.instance.collection('daily-report').snapshots();
-
   String abbreviateNumber(int number) {
     if (number >= 1000000000) {
       return '${(number / 1000000000).toStringAsFixed(1)}B';
@@ -37,8 +29,12 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final Stream<QuerySnapshot> documentStream =
-        FirebaseFirestore.instance.collection('daily-report').snapshots();
+    var date = DateFormat('dd-MMM-yy').format(DateTime.now());
+    final Stream<QuerySnapshot> documentStream = FirebaseFirestore.instance
+        .collection('daily-report')
+        .where('fbusinessDate', isEqualTo: date.toUpperCase())
+        .orderBy("time", descending: true)
+        .snapshots();
 
     return StreamBuilder<QuerySnapshot>(
         stream: documentStream,
@@ -47,7 +43,7 @@ class _HomePageState extends State<HomePage> {
             return const Center(child: CircularProgressIndicator());
           } else {
             if (snapshot.hasData) {
-              var reportModel = snapshot.data?.docs[0];
+              var reportModel = snapshot.data?.docs;
               return Scaffold(
                   appBar: AppBar(
                     automaticallyImplyLeading: false,
@@ -92,13 +88,12 @@ class _HomePageState extends State<HomePage> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               const Icon(Icons.calendar_today,
-                                  color: Colors.white), // Icon for date
-                              const SizedBox(
-                                  width: 8), // Space between the icon and text
+                                  color: Colors.white),
+                              const SizedBox(width: 8),
                               Text(
-                                "Business Date: ${reportModel?["fbusinessDate"]}",
+                                "Business Date: ${reportModel?[0]["fbusinessDate"]}",
                                 style: const TextStyle(
-                                  fontSize: 16, // Larger font size
+                                  fontSize: 16,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white,
                                 ),
@@ -111,13 +106,11 @@ class _HomePageState extends State<HomePage> {
                               child: Container(
                                 padding: const EdgeInsets.all(16),
                                 decoration: BoxDecoration(
-                                  color: const Color(
-                                      0xFFf8f9fa), // Light grey color for the card
+                                  color: const Color(0xFFf8f9fa),
                                   borderRadius: BorderRadius.circular(15),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: Colors.black.withOpacity(
-                                          0.1), // Lighter shadow for softer look
+                                      color: Colors.black.withOpacity(0.1),
                                       blurRadius: 10,
                                       offset: const Offset(5, 5),
                                     ),
@@ -126,32 +119,26 @@ class _HomePageState extends State<HomePage> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    // Title
                                     const Text(
                                       'Cash',
                                       style: TextStyle(
-                                        fontSize:
-                                            24, // Larger font size for the title
+                                        fontSize: 24,
                                         fontWeight: FontWeight.bold,
                                         color: Colors.black,
                                       ),
                                     ),
-                                    const SizedBox(
-                                        height:
-                                            20), // More space below the title
+                                    const SizedBox(height: 20),
                                     Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        // Debit
                                         Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             const Icon(Icons.arrow_downward,
                                                 color: Colors.red),
-                                            const SizedBox(
-                                                width: 8), // Icon for debit
+                                            const SizedBox(width: 8),
                                             const Text(
                                               'No. Debit = ',
                                               style: TextStyle(
@@ -163,7 +150,7 @@ class _HomePageState extends State<HomePage> {
                                             ),
                                             Text(
                                               abbreviateNumber(int.parse(
-                                                  reportModel?["noDebit"])),
+                                                  reportModel?[0]["noDebit"])),
                                               style: const TextStyle(
                                                 color: Color.fromARGB(
                                                     255, 10, 184, 239),
@@ -174,7 +161,7 @@ class _HomePageState extends State<HomePage> {
                                           ],
                                         ),
                                         Text(
-                                          'Amount = ${abbreviateNumber(int.parse(reportModel?["ttlDrAmt"]))}',
+                                          'Amount = ${abbreviateNumber(int.parse(reportModel?[0]["ttlDrAmt"]))}',
                                           style: const TextStyle(
                                             color: Color.fromARGB(
                                                 255, 10, 184, 239),
@@ -184,12 +171,8 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                       ],
                                     ),
-
-                                    const Divider(
-                                        color: Colors.grey), // Divider
-                                    const SizedBox(
-                                        height:
-                                            20), // More space before the next row
+                                    const Divider(color: Colors.grey),
+                                    const SizedBox(height: 20),
                                     Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
@@ -198,10 +181,9 @@ class _HomePageState extends State<HomePage> {
                                           children: [
                                             const Icon(Icons.arrow_upward,
                                                 color: Colors.green),
-                                            const SizedBox(
-                                                width: 8), // Icon for credit
+                                            const SizedBox(width: 8),
                                             Text(
-                                              'No. Credit = ${abbreviateNumber(int.parse(reportModel?["noCredit"]))}',
+                                              'No. Credit = ${abbreviateNumber(int.parse(reportModel?[0]["noCredit"]))}',
                                               style: const TextStyle(
                                                 color: Color.fromARGB(
                                                     255, 10, 184, 239),
@@ -212,7 +194,7 @@ class _HomePageState extends State<HomePage> {
                                           ],
                                         ),
                                         Text(
-                                          'Amount = ${abbreviateNumber(int.parse(reportModel?["ttlCrAmt"]))}',
+                                          'Amount = ${abbreviateNumber(int.parse(reportModel?[0]["ttlCrAmt"]))}',
                                           style: const TextStyle(
                                             color: Color.fromARGB(
                                                 255, 10, 184, 239),
@@ -222,12 +204,8 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                       ],
                                     ),
-
-                                    const Divider(
-                                        color: Colors.grey), // Divider
+                                    const Divider(color: Colors.grey),
                                     const SizedBox(height: 20),
-
-                                    // Amount Difference Row
                                     Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceEvenly,
@@ -236,11 +214,9 @@ class _HomePageState extends State<HomePage> {
                                           children: [
                                             const Icon(Icons.compare_arrows,
                                                 color: Colors.blue),
-                                            const SizedBox(
-                                                width:
-                                                    8), // Icon for difference
+                                            const SizedBox(width: 8),
                                             Text(
-                                              'Amount Diff = ${abbreviateNumber(int.parse(reportModel?["ttlCrAmt"]) - int.parse(reportModel?["ttlDrAmt"]))}',
+                                              'Amount Diff = ${abbreviateNumber(int.parse(reportModel?[0]["ttlCrAmt"]) - int.parse(reportModel?[0]["ttlDrAmt"]))}',
                                               style: const TextStyle(
                                                 color: Color.fromARGB(
                                                     255, 10, 184, 239),
@@ -252,15 +228,10 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                       ],
                                     ),
-                                    const SizedBox(
-                                        height:
-                                            20), // More space before the button
-
-                                    // Button
+                                    const SizedBox(height: 20),
                                     Center(
                                       child: ElevatedButton(
-                                        onPressed:
-                                            () {}, // Add your action here
+                                        onPressed: () {},
                                         child: const Text('View Details'),
                                       ),
                                     ),
@@ -279,8 +250,7 @@ class _HomePageState extends State<HomePage> {
                                   borderRadius: BorderRadius.circular(15),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: Colors.black.withOpacity(
-                                          0.1), // Lighter shadow for softer look
+                                      color: Colors.black.withOpacity(0.1),
                                       blurRadius: 10,
                                       offset: const Offset(5, 5),
                                     ),
@@ -289,34 +259,26 @@ class _HomePageState extends State<HomePage> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    // Title
                                     const Text(
                                       'Non Cash',
                                       style: TextStyle(
-                                        fontSize:
-                                            24, // Larger font size for the title
+                                        fontSize: 24,
                                         fontWeight: FontWeight.bold,
                                         color: Colors.black,
                                       ),
                                     ),
-                                    const SizedBox(
-                                        height:
-                                            20), // More space below the title
-                                    // Transaction Rows
+                                    const SizedBox(height: 20),
                                     Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        // Number of Transactions
                                         Row(
                                           children: [
                                             const Icon(Icons.sync_alt,
                                                 color: Colors.blue),
-                                            const SizedBox(
-                                                width:
-                                                    10), // Icon for transactions
+                                            const SizedBox(width: 10),
                                             Text(
-                                              'No. TR = ${abbreviateNumber(int.parse(reportModel?["noTr"]))}',
+                                              'No. TR = ${abbreviateNumber(int.parse(reportModel?[0]["noTr"]))}',
                                               style: const TextStyle(
                                                 color: Color.fromARGB(
                                                     255, 10, 184, 239),
@@ -328,9 +290,8 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                         Row(
                                           children: [
-                                            // Icon for amount
                                             Text(
-                                              'Amount = ${abbreviateNumber(int.parse(reportModel?["ttlAmount"]))}',
+                                              'Amount = ${abbreviateNumber(int.parse(reportModel?[0]["ttlAmount"]))}',
                                               style: const TextStyle(
                                                 color: Color.fromARGB(
                                                     255, 10, 184, 239),
@@ -342,15 +303,14 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                       ],
                                     ),
-                                    const Divider(
-                                        color: Colors.grey), // Divider
+                                    const Divider(color: Colors.grey),
                                     const SizedBox(height: 20),
-
-                                    // Button
                                     Center(
                                       child: ElevatedButton(
-                                        onPressed:
-                                            () {}, // Add your action here
+                                        onPressed: () {
+                                          Navigator.pushNamed(
+                                              context, "/details");
+                                        },
                                         child: const Text('View Details'),
                                       ),
                                     ),

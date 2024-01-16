@@ -1,3 +1,5 @@
+import 'package:cbo_report/features/user_auth/presentation/pages/detail_page.dart';
+import 'package:cbo_report/features/user_auth/presentation/pages/sample.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +29,7 @@ class MyApp extends StatelessWidget {
               child: LoginPage(),
             ),
         '/login': (context) => const LoginPage(),
+        '/details': (context) => const Details(),
         '/home': (context) => const HomePage(),
       },
     );
