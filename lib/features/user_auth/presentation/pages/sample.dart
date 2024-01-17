@@ -1,5 +1,3 @@
-import 'package:cbo_report/features/user_auth/presentation/pages/app_resources.dart';
-import 'package:cbo_report/report_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -413,7 +411,7 @@ class _DetailsState extends State<Details> {
 
   Widget _dropDate() {
     return Card(
-      color: Color.fromARGB(255, 10, 184, 239),
+      color: const Color.fromARGB(255, 10, 184, 239),
       child: DropdownButton<String>(
         value: selectedDateRange,
         icon: const Icon(Icons.arrow_downward),
@@ -470,12 +468,12 @@ class _DetailsState extends State<Details> {
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
-              side: BorderSide(color: Colors.white, width: 2),
+              side: const BorderSide(color: Colors.white, width: 2),
             ),
           ),
           elevation: MaterialStateProperty.all<double>(5),
           padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-            EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
           ),
         ),
         child: Text(
@@ -495,7 +493,7 @@ class _DetailsState extends State<Details> {
     List<FlSpot> creditData = [];
 
     List<FlSpot> debitData = [];
-    debitData.add(FlSpot(0, 0.0));
+    debitData.add(const FlSpot(0, 0.0));
     for (int i = 0; i < reportModel?.length; i++) {
       debitData
           .add(FlSpot(i + 1, double.parse(reportModel?[i]['noDebit']) / 10000));
@@ -503,7 +501,7 @@ class _DetailsState extends State<Details> {
     }
 
     List<FlSpot> nonCashData = [];
-    nonCashData.add(FlSpot(0, 0.0));
+    nonCashData.add(const FlSpot(0, 0.0));
     for (int i = 0; i < reportModel?.length; i++) {
       nonCashData
           .add(FlSpot(i + 1, double.parse(reportModel?[i]['noTr']) / 10000));
@@ -539,7 +537,7 @@ class _DetailsState extends State<Details> {
         DateTime now = DateTime.now();
         DateFormat format = DateFormat('dd-MMM-yy');
         date = format.format(now);
-        creditData.add(FlSpot(0, 0.0));
+        creditData.add(const FlSpot(0, 0.0));
         for (int i = 0; i < reportModel?.length; i++) {
           creditData.add(
               FlSpot(i + 1, double.parse(reportModel?[i]['noCredit']) / 10000));
@@ -549,7 +547,7 @@ class _DetailsState extends State<Details> {
         selectedDate = bottomTitleWeekWidgets;
         maxXValue = 6.0;
         date = startOfWeek;
-        creditData.add(FlSpot(0, 0.0));
+        creditData.add(const FlSpot(0, 0.0));
         for (int i = 0; i < reportModel?.length; i++) {
           if (reportModel?[i]['time'] == '14') {
             creditData.add(FlSpot(
@@ -660,7 +658,7 @@ class _DetailsState extends State<Details> {
 
   LineChartData getAmtChartData(var reportModel) {
     List<FlSpot> creditData = [];
-    creditData.add(FlSpot(0, 0.0));
+    creditData.add(const FlSpot(0, 0.0));
     for (int i = 0; i < reportModel?.length; i++) {
       creditData.add(FlSpot(
           i + 1,
@@ -669,7 +667,7 @@ class _DetailsState extends State<Details> {
     }
 
     List<FlSpot> debitData = [];
-    debitData.add(FlSpot(0, 0.0));
+    debitData.add(const FlSpot(0, 0.0));
     for (int i = 0; i < reportModel?.length; i++) {
       debitData.add(FlSpot(
           i + 1,
@@ -678,7 +676,7 @@ class _DetailsState extends State<Details> {
     }
 
     List<FlSpot> nonCashData = [];
-    nonCashData.add(FlSpot(0, 0.0));
+    nonCashData.add(const FlSpot(0, 0.0));
     for (int i = 0; i < reportModel?.length; i++) {
       nonCashData.add(FlSpot(i + 1,
           double.parse(reportModel?[i]['ttlAmount']) / 1000000000)); //billion
@@ -770,7 +768,7 @@ class _DetailsState extends State<Details> {
           ),
           axisNameWidget: Text(
             labelMeasure,
-            style: TextStyle(fontSize: 12, color: Colors.cyan),
+            style: const TextStyle(fontSize: 12, color: Colors.cyan),
           ),
         ),
         topTitles: const AxisTitles(
