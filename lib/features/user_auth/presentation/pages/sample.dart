@@ -286,15 +286,15 @@ class _DetailsState extends State<Details> {
         break;
       case 'Debit':
         selectedData = debitData;
-        selectedSideTitle = leftTitleCashAmtWidgets;
+        selectedSideTitle = CustomTitles.leftTitleCashAmtWidgets;
         break;
       case 'Non-Cash':
         selectedData = nonCashData;
-        selectedSideTitle = leftTitleNonCashAmtWidgets;
+        selectedSideTitle = CustomTitles.leftTitleNonCashAmtWidgets;
         break;
       default:
         selectedData = [];
-        selectedSideTitle = leftTitleCashAmtWidgets;
+        selectedSideTitle = CustomTitles.leftTitleCashAmtWidgets;
     }
 
     var maxXValue = 6.0;
@@ -302,7 +302,7 @@ class _DetailsState extends State<Details> {
 
     switch (selectedDateRange) {
       case 'Today':
-        selectedDate = bottomTitleHoursWidgets;
+        selectedDate = CustomTitles.bottomTitleHoursWidgets;
         maxXValue = 6.0;
         DateTime now = DateTime.now();
         DateFormat format = DateFormat('dd-MMM-yy');
@@ -314,7 +314,7 @@ class _DetailsState extends State<Details> {
         }
         break;
       case 'This Week':
-        selectedDate = bottomTitleWeekWidgets;
+        selectedDate = CustomTitles.bottomTitleWeekWidgets;
         maxXValue = 6.0;
         date = startOfWeek;
         creditData.add(const FlSpot(0, 0.0));
@@ -327,12 +327,12 @@ class _DetailsState extends State<Details> {
         }
         break;
       case 'This Month':
-        selectedDate = bottomTitleMonthWidgets;
+        selectedDate = CustomTitles.bottomTitleMonthWidgets;
         maxXValue = 4.0;
         date = startOfMonth;
         break;
       default:
-        selectedDate = bottomTitleHoursWidgets;
+        selectedDate = CustomTitles.bottomTitleHoursWidgets;
     }
     return LineChartData(
       lineTouchData: const LineTouchData(enabled: false),
@@ -458,46 +458,46 @@ class _DetailsState extends State<Details> {
     switch (selectedTransactionType) {
       case 'Credit':
         selectedData = creditData;
-        selectedSideTitle = leftTitleCashAmtWidgets;
+        selectedSideTitle = CustomTitles.leftTitleCashAmtWidgets;
         labelMeasure = "TR Amount per 100M";
         break;
       case 'Debit':
         selectedData = debitData;
-        selectedSideTitle = leftTitleCashAmtWidgets;
+        selectedSideTitle = CustomTitles.leftTitleCashAmtWidgets;
         labelMeasure = "TR Amount per 100M";
         break;
       case 'Non-Cash':
         selectedData = nonCashData;
-        selectedSideTitle = leftTitleNonCashAmtWidgets;
+        selectedSideTitle = CustomTitles.leftTitleNonCashAmtWidgets;
         labelMeasure = "TR Amount per billion";
         break;
       default:
         selectedData = [];
-        selectedSideTitle = leftTitleCashAmtWidgets;
+        selectedSideTitle = CustomTitles.leftTitleCashAmtWidgets;
     }
 
     var maxXValue = 6.0;
     Widget Function(double, TitleMeta) selectedDate;
     switch (selectedDateRange) {
       case 'Today':
-        selectedDate = bottomTitleHoursWidgets;
+        selectedDate = CustomTitles.bottomTitleHoursWidgets;
         maxXValue = 6.0;
         DateTime now = DateTime.now();
         DateFormat format = DateFormat('dd-MMM-yy');
         date = format.format(now);
         break;
       case 'This Week':
-        selectedDate = bottomTitleWeekWidgets;
+        selectedDate = CustomTitles.bottomTitleWeekWidgets;
         maxXValue = 6.0;
         date = startOfWeek;
         break;
       case 'This Month':
-        selectedDate = bottomTitleMonthWidgets;
+        selectedDate = CustomTitles.bottomTitleMonthWidgets;
         maxXValue = 4.0;
         date = startOfMonth;
         break;
       default:
-        selectedDate = bottomTitleHoursWidgets;
+        selectedDate = CustomTitles.bottomTitleHoursWidgets;
     }
     return LineChartData(
       lineTouchData: const LineTouchData(enabled: false),
@@ -618,14 +618,14 @@ class _DetailsState extends State<Details> {
           sideTitles: SideTitles(
             showTitles: true,
             reservedSize: 30,
-            getTitlesWidget: bottomTitleHoursWidgets,
+            getTitlesWidget: CustomTitles.bottomTitleHoursWidgets,
             interval: 1,
           ),
         ),
         leftTitles: AxisTitles(
           sideTitles: SideTitles(
             showTitles: true,
-            getTitlesWidget: leftTitleCashAmtWidgets,
+            getTitlesWidget: CustomTitles.leftTitleCashAmtWidgets,
             reservedSize: 42,
             interval: 1,
           ),
