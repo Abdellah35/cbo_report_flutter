@@ -112,31 +112,31 @@ class CustomTitles {
     String text;
     switch (value.toInt()) {
       case 1:
-        text = '10';
+        text = '1';
         break;
       case 2:
-        text = '20';
+        text = '';
         break;
       case 3:
-        text = '30';
+        text = '3';
         break;
       case 4:
-        text = '40';
+        text = '';
         break;
       case 5:
-        text = '50';
+        text = '5';
         break;
       case 6:
-        text = '60';
+        text = '';
         break;
       case 7:
-        text = '70';
+        text = '7';
         break;
       case 8:
-        text = '80';
+        text = '';
         break;
       case 9:
-        text = '90';
+        text = '9';
         break;
 
       default:
@@ -154,34 +154,31 @@ class CustomTitles {
     String text;
     switch (value.toInt()) {
       case 1:
-        text = '10';
+        text = '1';
         break;
       case 2:
-        text = '20';
+        text = '';
         break;
       case 3:
-        text = '30';
+        text = '3';
         break;
       case 4:
-        text = '40';
+        text = '';
         break;
       case 5:
-        text = '50';
+        text = '5';
         break;
       case 6:
-        text = '60';
+        text = '';
         break;
       case 7:
-        text = '70';
+        text = '7';
         break;
       case 8:
-        text = '80';
+        text = '';
         break;
       case 9:
-        text = '90';
-        break;
-      case 10:
-        text = '100';
+        text = '9';
         break;
 
       default:
