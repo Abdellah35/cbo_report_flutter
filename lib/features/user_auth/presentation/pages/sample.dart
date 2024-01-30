@@ -320,38 +320,40 @@ class _DetailsState extends State<Details> {
         debitData = [];
         nonCashData = [];
         creditData.add(const FlSpot(0, 0.0));
-        creditData
-            .add(FlSpot(1, double.parse(todaydata?[0]['noCredit']) / 10000));
+        if (todaydata?.length >= 1) {
+          creditData
+              .add(FlSpot(1, double.parse(todaydata?[0]['noCredit']) / 10000));
 
-        debitData.add(const FlSpot(0, 0.0));
-        debitData
-            .add(FlSpot(1, double.parse(todaydata?[0]['noDebit']) / 10000));
+          debitData.add(const FlSpot(0, 0.0));
+          debitData
+              .add(FlSpot(1, double.parse(todaydata?[0]['noDebit']) / 10000));
 
-        nonCashData.add(const FlSpot(0, 0.0));
-        nonCashData.add(FlSpot(1, double.parse(todaydata?[0]['noTr']) / 10000));
+          nonCashData.add(const FlSpot(0, 0.0));
+          nonCashData
+              .add(FlSpot(1, double.parse(todaydata?[0]['noTr']) / 10000));
 
-        if (todaydata?.length >= 2) {
-          for (int i = 1; i < todaydata?.length; i++) {
-            print(todaydata?[i]['fbusinessDate']);
-            creditData.add(FlSpot(
-                i + 1,
-                (double.parse(todaydata?[i]['noCredit']) / 10000) -
-                    (double.parse(todaydata?[i - 1]['noCredit']) / 10000)));
-          }
-          for (int i = 1; i < todaydata?.length; i++) {
-            debitData.add(FlSpot(
-                i + 1,
-                (double.parse(todaydata?[i]['noDebit']) / 10000) -
-                    (double.parse(todaydata?[i - 1]['noDebit']) / 10000)));
-          }
-          for (int i = 1; i < todaydata?.length; i++) {
-            nonCashData.add(FlSpot(
-                i + 1,
-                (double.parse(todaydata?[i]['noTr']) / 10000) -
-                    (double.parse(todaydata?[i - 1]['noTr']) / 10000)));
+          if (todaydata?.length >= 2) {
+            for (int i = 1; i < todaydata?.length; i++) {
+              print(todaydata?[i]['fbusinessDate']);
+              creditData.add(FlSpot(
+                  i + 1,
+                  (double.parse(todaydata?[i]['noCredit']) / 10000) -
+                      (double.parse(todaydata?[i - 1]['noCredit']) / 10000)));
+            }
+            for (int i = 1; i < todaydata?.length; i++) {
+              debitData.add(FlSpot(
+                  i + 1,
+                  (double.parse(todaydata?[i]['noDebit']) / 10000) -
+                      (double.parse(todaydata?[i - 1]['noDebit']) / 10000)));
+            }
+            for (int i = 1; i < todaydata?.length; i++) {
+              nonCashData.add(FlSpot(
+                  i + 1,
+                  (double.parse(todaydata?[i]['noTr']) / 10000) -
+                      (double.parse(todaydata?[i - 1]['noTr']) / 10000)));
+            }
           }
         }
-
         break;
       case 'This Week':
         selectedDate = CustomTitles.bottomTitleWeekWidgets;
@@ -551,33 +553,42 @@ class _DetailsState extends State<Details> {
         selectedDate = CustomTitles.bottomTitleHoursWidgets;
         maxXValue = 6.0;
         creditAmtData.add(const FlSpot(0, 0.0));
-        creditAmtData.add(
-            FlSpot(1, double.parse(todaydata?[0]['ttlCrAmt']) / 100000000));
-        for (int i = 1; i < todaydata?.length; i++) {
-          creditAmtData.add(FlSpot(
-              i + 1,
-              (double.parse(todaydata?[i]['ttlCrAmt']) / 100000000) -
-                  (double.parse(todaydata?[i - 1]['ttlCrAmt']) / 100000000)));
-        }
-
         debitAmtData.add(const FlSpot(0, 0.0));
-        debitAmtData.add(
-            FlSpot(1, double.parse(todaydata?[0]['ttlDrAmt']) / 100000000));
-        for (int i = 1; i < todaydata?.length; i++) {
-          debitAmtData.add(FlSpot(
-              i + 1,
-              (double.parse(todaydata?[i]['ttlDrAmt']) / 100000000) -
-                  (double.parse(todaydata?[i - 1]['ttlDrAmt']) / 100000000)));
-        }
-
         nonCashAmtData.add(const FlSpot(0, 0.0));
-        nonCashAmtData.add(
-            FlSpot(1, double.parse(todaydata?[0]['ttlAmount']) / 1000000000));
-        for (int i = 1; i < todaydata?.length; i++) {
-          nonCashAmtData.add(FlSpot(
-              i + 1,
-              (double.parse(todaydata?[i]['ttlAmount']) / 1000000000) -
-                  (double.parse(todaydata?[i - 1]['ttlAmount']) / 1000000000)));
+
+        if (todaydata?.length >= 1) {
+          creditAmtData.add(
+              FlSpot(1, double.parse(todaydata?[0]['ttlCrAmt']) / 100000000));
+          nonCashAmtData.add(
+              FlSpot(1, double.parse(todaydata?[0]['ttlAmount']) / 1000000000));
+          debitAmtData.add(
+              FlSpot(1, double.parse(todaydata?[0]['ttlDrAmt']) / 100000000));
+
+          if (todaydata?.length >= 2) {
+            for (int i = 1; i < todaydata?.length; i++) {
+              creditAmtData.add(FlSpot(
+                  i + 1,
+                  (double.parse(todaydata?[i]['ttlCrAmt']) / 100000000) -
+                      (double.parse(todaydata?[i - 1]['ttlCrAmt']) /
+                          100000000)));
+            }
+
+            for (int i = 1; i < todaydata?.length; i++) {
+              debitAmtData.add(FlSpot(
+                  i + 1,
+                  (double.parse(todaydata?[i]['ttlDrAmt']) / 100000000) -
+                      (double.parse(todaydata?[i - 1]['ttlDrAmt']) /
+                          100000000)));
+            }
+
+            for (int i = 1; i < todaydata?.length; i++) {
+              nonCashAmtData.add(FlSpot(
+                  i + 1,
+                  (double.parse(todaydata?[i]['ttlAmount']) / 1000000000) -
+                      (double.parse(todaydata?[i - 1]['ttlAmount']) /
+                          1000000000)));
+            }
+          }
         }
         break;
       case 'This Week':
