@@ -3,6 +3,7 @@ import 'package:cbo_report/features/user_auth/presentation/pages/titles.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 
 class Details extends StatefulWidget {
@@ -24,13 +25,9 @@ class _DetailsState extends State<Details> {
   String selectedDateRange = 'Today';
 
   var today;
-
   var yesterday;
-
   var startOfWeek;
-
   var startOfMonth;
-
   var reportModelList;
 
   @override
@@ -82,7 +79,9 @@ class _DetailsState extends State<Details> {
         stream: documentStreams,
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasData) {
-            return baseBody(snapshot);
+            return Scaffold(
+                backgroundColor: const Color.fromARGB(255, 10, 184, 239),
+                body: baseBody(snapshot));
           } else if (snapshot.hasError) {
             return Center(child: Text(snapshot.error.toString()));
           } else {
@@ -95,7 +94,7 @@ class _DetailsState extends State<Details> {
         });
   }
 
-  Container baseBody(AsyncSnapshot<QuerySnapshot> snapshot) {
+  SingleChildScrollView baseBody(AsyncSnapshot<QuerySnapshot> snapshot) {
     reportModelList = snapshot.data?.docs;
     var thisWeek = [];
     var todayData = [];
@@ -118,193 +117,152 @@ class _DetailsState extends State<Details> {
       }
     }
 
-    return Container(
-      color: const Color.fromARGB(255, 10, 184, 239),
-      child: Column(
-        children: [
-          const SizedBox(height: 10),
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.center,
-          //   children: [
-          //     const SizedBox(width: 20),
-          //     _dropDate(),
-          //   ],
-          // ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              const SizedBox(width: 20),
-              DateWidget(
-                selectedDateRange: selectedDateRange,
-                onChanged: (String? value) {
-                  setState(() {
-                    selectedDateRange = value!;
-                  });
-                },
-              ),
-            ],
-          ),
-          const SizedBox(height: 20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              const SizedBox(width: 20),
-              _buildOptionButton('Credit'),
-              const SizedBox(width: 20),
-              _buildOptionButton('Debit'),
-              const SizedBox(width: 20),
-              _buildOptionButton('Non-Cash'),
-              const SizedBox(width: 20),
-            ],
-          ),
-          const SizedBox(height: 20),
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              color: Colors.white,
-            ),
-            margin: const EdgeInsets.all(16),
-            child: Stack(
-              children: <Widget>[
-                AspectRatio(
-                  aspectRatio: 1.70,
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                      right: 18,
-                      left: 12,
-                      top: 24,
-                      bottom: 12,
-                    ),
-                    child: LineChart(
-                      getChartData(todayData, thisWeek, thisMonth),
-                    ),
-                  ),
-                )
-              ],
-            ),
-          ),
-          const SizedBox(height: 20),
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              color: Colors.white,
-            ),
-            margin: const EdgeInsets.all(16),
-            child: Stack(
-              children: <Widget>[
-                AspectRatio(
-                  aspectRatio: 1.70,
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                      right: 18,
-                      left: 12,
-                      top: 24,
-                      bottom: 12,
-                    ),
-                    child: LineChart(
-                      getAmtChartData(todayData, thisWeek, thisMonth),
-                    ),
-                  ),
+    return SingleChildScrollView(
+      child: Container(
+        color: const Color.fromARGB(255, 10, 184, 239),
+        child: Column(
+          children: [
+            const SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                const SizedBox(width: 20),
+                DateWidget(
+                  selectedDateRange: selectedDateRange,
+                  onChanged: (String? value) {
+                    setState(() {
+                      selectedDateRange = value!;
+                    });
+                  },
                 ),
               ],
             ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _dropDate() {
-    return Container(
-      padding: EdgeInsets.fromLTRB(3, 0, 0, 0),
-      decoration: BoxDecoration(
-        color: Color.fromARGB(255, 10, 184, 239),
-        borderRadius: BorderRadius.circular(5),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black26,
-            blurRadius: 5,
-            offset: Offset(2, 2),
-          ),
-        ],
-      ),
-      child: DropdownButton<String>(
-        value: selectedDateRange,
-        icon: const Icon(Icons.arrow_downward),
-        iconEnabledColor: Colors.white,
-        elevation: 16,
-        underline: Container(),
-        style: const TextStyle(color: Colors.orange),
-        onChanged: (String? value) {
-          setState(() {
-            selectedDateRange = value!;
-          });
-        },
-        items: ['Today', 'This Week', 'This Month']
-            .map<DropdownMenuItem<String>>((String value) {
-          return DropdownMenuItem<String>(
-            value: value,
-            child: Text(value),
-          );
-        }).toList(),
+            const SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                const SizedBox(width: 20),
+                _buildOptionButton('Credit'),
+                const SizedBox(width: 20),
+                _buildOptionButton('Debit'),
+                const SizedBox(width: 20),
+                _buildOptionButton('Non-Cash'),
+                const SizedBox(width: 20),
+              ],
+            ),
+            const SizedBox(height: 20),
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                color: Colors.white,
+              ),
+              margin: const EdgeInsets.all(16),
+              child: Stack(
+                children: <Widget>[
+                  AspectRatio(
+                    aspectRatio: 1.70,
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        right: 18,
+                        left: 12,
+                        top: 24,
+                        bottom: 12,
+                      ),
+                      child: LineChart(
+                        getChartData(todayData, thisWeek, thisMonth),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            const SizedBox(height: 20),
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                color: Colors.white,
+              ),
+              margin: const EdgeInsets.all(16),
+              child: Stack(
+                children: <Widget>[
+                  AspectRatio(
+                    aspectRatio: 1.70,
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                        right: 18,
+                        left: 12,
+                        top: 24,
+                        bottom: 12,
+                      ),
+                      child: LineChart(
+                        getAmtChartData(todayData, thisWeek, thisMonth),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildOptionButton(String option) {
     return Expanded(
-      child: ElevatedButton(
-        onPressed: () {
-          setState(() {
-            selectedTransactionType = option;
-          });
-        },
-        style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.resolveWith<Color>(
-            (Set<MaterialState> states) {
-              if (states.contains(MaterialState.pressed)) {
+      child: LayoutBuilder(builder: (context, constraints) {
+        return ElevatedButton(
+          onPressed: () {
+            setState(() {
+              selectedTransactionType = option;
+            });
+          },
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.resolveWith<Color>(
+              (Set<MaterialState> states) {
+                if (states.contains(MaterialState.pressed)) {
+                  return Colors.white;
+                }
+                if (selectedTransactionType == option) {
+                  return Colors.orange;
+                }
                 return Colors.white;
-              }
-              if (selectedTransactionType == option) {
+              },
+            ),
+            overlayColor: MaterialStateProperty.resolveWith<Color>(
+              (Set<MaterialState> states) {
+                if (states.contains(MaterialState.pressed)) {
+                  return Colors.transparent;
+                }
                 return Colors.orange;
-              }
-              return Colors.white;
-            },
-          ),
-          overlayColor: MaterialStateProperty.resolveWith<Color>(
-            (Set<MaterialState> states) {
-              if (states.contains(MaterialState.pressed)) {
-                return Colors.transparent;
-              }
-              return Colors.orange;
-            },
-          ),
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-            RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-              side: const BorderSide(color: Colors.white, width: 2),
+              },
+            ),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+                side: const BorderSide(color: Colors.white, width: 2),
+              ),
+            ),
+            elevation: MaterialStateProperty.all<double>(5),
+            padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+              const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             ),
           ),
-          elevation: MaterialStateProperty.all<double>(5),
-          padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-            const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          child: Text(
+            option,
+            style: TextStyle(
+              color: selectedTransactionType == option
+                  ? Colors.white
+                  : Colors.orange,
+              fontWeight: FontWeight.bold,
+            ),
           ),
-        ),
-        child: Text(
-          option,
-          style: TextStyle(
-            color: selectedTransactionType == option
-                ? Colors.white
-                : Colors.orange,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
+        );
+      }),
     );
   }
 
   LineChartData getChartData(var todaydata, var thisweek, var thisMonth) {
-    print(reportModelList);
     List<FlSpot> creditData = [];
     List<FlSpot> debitData = [];
     List<FlSpot> nonCashData = [];
@@ -334,19 +292,14 @@ class _DetailsState extends State<Details> {
 
           if (todaydata?.length >= 2) {
             for (int i = 1; i < todaydata?.length; i++) {
-              print(todaydata?[i]['fbusinessDate']);
               creditData.add(FlSpot(
                   i + 1,
                   (double.parse(todaydata?[i]['noCredit']) / 10000) -
                       (double.parse(todaydata?[i - 1]['noCredit']) / 10000)));
-            }
-            for (int i = 1; i < todaydata?.length; i++) {
               debitData.add(FlSpot(
                   i + 1,
                   (double.parse(todaydata?[i]['noDebit']) / 10000) -
                       (double.parse(todaydata?[i - 1]['noDebit']) / 10000)));
-            }
-            for (int i = 1; i < todaydata?.length; i++) {
               nonCashData.add(FlSpot(
                   i + 1,
                   (double.parse(todaydata?[i]['noTr']) / 10000) -
@@ -359,6 +312,10 @@ class _DetailsState extends State<Details> {
         selectedDate = CustomTitles.bottomTitleWeekWidgets;
         maxXValue = 6.0;
         creditData.add(const FlSpot(0, 0.0));
+        debitData.add(const FlSpot(0, 0.0));
+        double k = 1.0;
+        nonCashData.add(const FlSpot(0, 0.0));
+        double j = 1.0;
         double m = 1.0;
         for (int i = 0; i < thisweek?.length; i++) {
           if (thisweek?[i]['time'] == 14) {
@@ -366,21 +323,13 @@ class _DetailsState extends State<Details> {
                 .add(FlSpot(m, double.parse(thisweek?[i]['noCredit']) / 10000));
             m += 1;
           }
-        }
 
-        debitData.add(const FlSpot(0, 0.0));
-        double k = 1.0;
-        for (int i = 0; i < thisweek?.length; i++) {
           if (thisweek?[i]['time'] == 14) {
             debitData
                 .add(FlSpot(k, double.parse(thisweek?[i]['noDebit']) / 10000));
             k += 1;
           }
-        }
 
-        nonCashData.add(const FlSpot(0, 0.0));
-        double j = 1.0;
-        for (int i = 0; i < thisweek?.length; i++) {
           if (thisweek?[i]['time'] == 14) {
             nonCashData
                 .add(FlSpot(j, double.parse(thisweek?[i]['noTr']) / 10000));
@@ -407,7 +356,6 @@ class _DetailsState extends State<Details> {
               avgNonCash += double.parse(thisMonth?[i]['noTr']) / 10000;
               days += 1;
             } else {
-              print(avgCr);
               creditData.add(FlSpot(m, avgCr / days));
               debitData.add(FlSpot(m, avgDr / days));
               nonCashData.add(FlSpot(m, avgNonCash / days));
@@ -419,28 +367,32 @@ class _DetailsState extends State<Details> {
             }
           }
         }
-        // creditData.add(FlSpot(m, avgCr / days));
-        // debitData.add(FlSpot(m, avgDr / days));
-        // nonCashData.add(FlSpot(m, avgNonCash / days));
         break;
       default:
         selectedDate = CustomTitles.bottomTitleHoursWidgets;
     }
     List<FlSpot> selectedData;
     Widget Function(double, TitleMeta) selectedSideTitle;
-
+    var labelMeasure = "";
+    var topTitle = "";
     switch (selectedTransactionType) {
       case 'Credit':
         selectedData = creditData;
         selectedSideTitle = CustomTitles.leftTitleCashAmtWidgets;
+        labelMeasure = "per 10K";
+        topTitle = "Total Number of Credit Transactions";
         break;
       case 'Debit':
         selectedData = debitData;
         selectedSideTitle = CustomTitles.leftTitleCashAmtWidgets;
+        labelMeasure = "per 10K";
+        topTitle = "Total Number of Debit Transactions";
         break;
       case 'Non-Cash':
         selectedData = nonCashData;
         selectedSideTitle = CustomTitles.leftTitleNonCashAmtWidgets;
+        labelMeasure = "per 10K";
+        topTitle = "Total Number of Non-Cash Transactions";
         break;
       default:
         selectedData = [];
@@ -482,16 +434,27 @@ class _DetailsState extends State<Details> {
           sideTitles: SideTitles(
             showTitles: true,
             getTitlesWidget: selectedSideTitle,
-            reservedSize: 30,
+            reservedSize: 12,
             interval: 1,
           ),
-          axisNameWidget: const Text(
-            "No. TR per 10,000",
-            style: TextStyle(fontSize: 12, color: Colors.cyan),
+          axisNameWidget: Text(
+            labelMeasure,
+            style: const TextStyle(
+              fontSize: 12,
+              color: Color.fromARGB(255, 10, 184, 239),
+            ),
           ),
         ),
-        topTitles: const AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
+        topTitles: AxisTitles(
+          sideTitles: const SideTitles(
+            showTitles: false,
+            reservedSize: 5,
+          ),
+          axisNameWidget: Text(
+            topTitle,
+            style: const TextStyle(
+                fontSize: 12, color: Colors.cyan, fontWeight: FontWeight.bold),
+          ),
         ),
         rightTitles: const AxisTitles(
           sideTitles: SideTitles(showTitles: false),
@@ -571,17 +534,11 @@ class _DetailsState extends State<Details> {
                   (double.parse(todaydata?[i]['ttlCrAmt']) / 100000000) -
                       (double.parse(todaydata?[i - 1]['ttlCrAmt']) /
                           100000000)));
-            }
-
-            for (int i = 1; i < todaydata?.length; i++) {
               debitAmtData.add(FlSpot(
                   i + 1,
                   (double.parse(todaydata?[i]['ttlDrAmt']) / 100000000) -
                       (double.parse(todaydata?[i - 1]['ttlDrAmt']) /
                           100000000)));
-            }
-
-            for (int i = 1; i < todaydata?.length; i++) {
               nonCashAmtData.add(FlSpot(
                   i + 1,
                   (double.parse(todaydata?[i]['ttlAmount']) / 1000000000) -
@@ -596,33 +553,30 @@ class _DetailsState extends State<Details> {
         maxXValue = 6.0;
         creditAmtData.add(const FlSpot(0, 0.0));
         double m = 1.0;
+        debitAmtData.add(const FlSpot(0, 0.0));
+        double k = 1.0;
+        nonCashAmtData.add(const FlSpot(0, 0.0));
+        double j = 1.0;
         for (int i = 0; i < thisweek?.length; i++) {
           if (thisweek?[i]['time'] == 14) {
             creditAmtData.add(
                 FlSpot(m, double.parse(thisweek?[i]['ttlCrAmt']) / 100000000));
             m += 1;
           }
-        }
 
-        debitAmtData.add(const FlSpot(0, 0.0));
-        double k = 1.0;
-        for (int i = 0; i < thisweek?.length; i++) {
           if (thisweek?[i]['time'] == 14) {
             debitAmtData.add(
                 FlSpot(k, double.parse(thisweek?[i]['ttlDrAmt']) / 100000000));
             k += 1;
           }
-        }
 
-        nonCashAmtData.add(const FlSpot(0, 0.0));
-        double j = 1.0;
-        for (int i = 0; i < thisweek?.length; i++) {
           if (thisweek?[i]['time'] == 14) {
             nonCashAmtData.add(FlSpot(
                 j, double.parse(thisweek?[i]['ttlAmount']) / 1000000000));
             j += 1;
           }
         }
+
         break;
       case 'This Month':
         selectedDate = CustomTitles.bottomTitleMonthWidgets;
@@ -655,32 +609,33 @@ class _DetailsState extends State<Details> {
             }
           }
         }
-        // creditAmtData.add(FlSpot(m, avgCr / days));
-        // debitAmtData.add(FlSpot(m, avgDr / days));
-        // nonCashAmtData.add(FlSpot(m, avgNonCash / days));
         break;
       default:
         selectedDate = CustomTitles.bottomTitleHoursWidgets;
     }
     List<FlSpot> selectedData;
     var labelMeasure = "TR Amount per 100M";
+    var topTitle = "";
     Widget Function(double, TitleMeta) selectedSideTitle;
 
     switch (selectedTransactionType) {
       case 'Credit':
         selectedData = creditAmtData;
         selectedSideTitle = CustomTitles.leftTitleCashAmtWidgets;
-        labelMeasure = "TR Amount per 100M";
+        labelMeasure = "Per 100M";
+        topTitle = "Total Credit Transaction Amount";
         break;
       case 'Debit':
         selectedData = debitAmtData;
         selectedSideTitle = CustomTitles.leftTitleCashAmtWidgets;
-        labelMeasure = "TR Amount per 100M";
+        labelMeasure = "Per 100M";
+        topTitle = "Total Debit Transaction Amount";
         break;
       case 'Non-Cash':
         selectedData = nonCashAmtData;
         selectedSideTitle = CustomTitles.leftTitleNonCashAmtWidgets;
-        labelMeasure = "TR Amount per billion";
+        labelMeasure = "Per billion";
+        topTitle = "Total Non-Cash Transaction Amount";
         break;
       default:
         selectedData = [];
@@ -722,7 +677,7 @@ class _DetailsState extends State<Details> {
           sideTitles: SideTitles(
             showTitles: true,
             getTitlesWidget: selectedSideTitle,
-            reservedSize: 20,
+            reservedSize: 12,
             interval: 1,
           ),
           axisNameWidget: Text(
@@ -730,8 +685,16 @@ class _DetailsState extends State<Details> {
             style: const TextStyle(fontSize: 12, color: Colors.cyan),
           ),
         ),
-        topTitles: const AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
+        topTitles: AxisTitles(
+          sideTitles: const SideTitles(
+            showTitles: false,
+            reservedSize: 20,
+          ),
+          axisNameWidget: Text(
+            topTitle,
+            style: const TextStyle(
+                fontSize: 12, color: Colors.cyan, fontWeight: FontWeight.bold),
+          ),
         ),
         rightTitles: const AxisTitles(
           sideTitles: SideTitles(showTitles: false),

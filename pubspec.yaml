@@ -28,7 +28,18 @@ dev_dependencies:
   google_sign_in: ^6.2.1
   font_awesome_flutter: ^10.6.0
   get: ^4.6.6
-  
+  flutter_launcher_icons: "^0.13.1"
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/Cooplogo.png"
+  min_sdk_android: 21 # android min sdk min:16, default 21
+  web:
+    generate: true
+    image_path: "assets/images/Cooplogo.png"
+    background_color: "#hexcode"
+    theme_color: "#hexcode"
 # The following section is specific to Flutter packages.
 flutter:
   uses-material-design: true

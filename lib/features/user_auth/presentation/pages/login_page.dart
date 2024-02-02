@@ -1,3 +1,4 @@
+import 'package:cbo_report/features/user_auth/presentation/pages/home_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cbo_report/features/user_auth/presentation/widgets/form_container_widget.dart';
@@ -33,7 +34,7 @@ class _LoginPageState extends State<LoginPage> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: const Text(
-          "Login",
+          "",
           style: TextStyle(
               color: Color.fromARGB(255, 10, 184, 239),
               fontWeight: FontWeight.bold),
@@ -130,33 +131,30 @@ class _LoginPageState extends State<LoginPage> {
 
     if (user != null) {
       showToast(message: "Successfully signed in");
-      Navigator.pushNamed(context, "/home");
+      // Navigator.pushNamed(context, "/home");
+      Navigator.of(context).push(_createRoute());
     } else {
       showToast(message: "some error occured");
     }
   }
 
-  _signInWithGoogle() async {
-    final GoogleSignIn googleSignIn = GoogleSignIn();
+  Route _createRoute() {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => const HomePage(),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(0.0, 1.0);
+        const end = Offset.zero;
+        const curve = Curves.fastEaseInToSlowEaseOut;
 
-    try {
-      final GoogleSignInAccount? googleSignInAccount =
-          await googleSignIn.signIn();
+        var tween =
+            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+        final offsetAnimation = animation.drive(tween);
 
-      if (googleSignInAccount != null) {
-        final GoogleSignInAuthentication googleSignInAuthentication =
-            await googleSignInAccount.authentication;
-
-        final AuthCredential credential = GoogleAuthProvider.credential(
-          idToken: googleSignInAuthentication.idToken,
-          accessToken: googleSignInAuthentication.accessToken,
+        return SlideTransition(
+          position: offsetAnimation,
+          child: child,
         );
-
-        await _firebaseAuth.signInWithCredential(credential);
-        Navigator.pushNamed(context, "/home");
-      }
-    } catch (e) {
-      showToast(message: "some error occured $e");
-    }
+      },
+    );
   }
 }

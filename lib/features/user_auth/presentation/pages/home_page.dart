@@ -1,3 +1,4 @@
+import 'package:cbo_report/features/user_auth/presentation/pages/sample.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -54,6 +55,9 @@ class _HomePageState extends State<HomePage> {
 
   Scaffold getBody(AsyncSnapshot<QuerySnapshot> snapshot) {
     var reportModel = snapshot.data?.docs;
+    print(reportModel?[0]["fbusinessDate"].toString());
+    var today = DateFormat('dd-MMM-yyyy').format(DateTime.now());
+    print(today);
     return Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
@@ -100,9 +104,9 @@ class _HomePageState extends State<HomePage> {
                     const Icon(Icons.calendar_today, color: Colors.white),
                     const SizedBox(width: 8),
                     Text(
-                      "Business Date: ${reportModel?[0]["fbusinessDate"].toString().toUpperCase()}",
-                      style: GoogleFonts.abel(
-                          fontSize: 16.0,
+                      "Business Date: ${today}",
+                      style: TextStyle(
+                          fontSize: 18.0,
                           fontWeight: FontWeight.bold,
                           color: Colors.white),
                     ),
@@ -284,13 +288,6 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ],
                           ),
-                          const SizedBox(height: 20),
-                          Center(
-                            child: ElevatedButton(
-                              onPressed: () {},
-                              child: const Text('View Details'),
-                            ),
-                          ),
                         ],
                       ),
                     ),
@@ -355,22 +352,44 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ],
                           ),
-                          const Divider(color: Colors.grey),
-                          const SizedBox(height: 20),
-                          Center(
-                            child: ElevatedButton(
-                              onPressed: () {
-                                Navigator.pushNamed(context, "/details");
-                              },
-                              child: const Text('View Details'),
-                            ),
-                          ),
                         ],
                       ),
                     ),
                   ),
                 ),
+                const SizedBox(height: 20),
+                Center(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).push(_createRoute());
+                    },
+                    child: const Text('View Details',
+                        style: TextStyle(
+                          color: Color.fromARGB(255, 10, 184, 239),
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        )),
+                  ),
+                ),
               ],
             )));
+  }
+
+  Route _createRoute() {
+    return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => const Details(),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(0.0, 1.0);
+        const end = Offset.zero;
+        const curve = Curves.fastEaseInToSlowEaseOut;
+
+        var tween =
+            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+        return SlideTransition(
+          position: animation.drive(tween),
+          child: child,
+        );
+      },
+    );
   }
 }
