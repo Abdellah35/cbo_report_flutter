@@ -31,15 +31,20 @@ dev_dependencies:
   flutter_launcher_icons: "^0.13.1"
 
 flutter_launcher_icons:
-  android: "launcher_icon"
+  android: true
   ios: true
   image_path: "assets/images/Cooplogo.png"
   min_sdk_android: 21 # android min sdk min:16, default 21
   web:
     generate: true
     image_path: "assets/images/Cooplogo.png"
-    background_color: "#hexcode"
-    theme_color: "#hexcode"
+    background_color: "0xFF0AB8EF"
+    theme_color: "0xFF0AB8EF"
+
+flutter_icons:
+  image_path: "assets/images/Cooplogo.png"
+  android: true
+  ios: true
 # The following section is specific to Flutter packages.
 flutter:
   uses-material-design: true

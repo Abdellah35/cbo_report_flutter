@@ -36,7 +36,7 @@ class _LoginPageState extends State<LoginPage> {
         title: const Text(
           "",
           style: TextStyle(
-              color: Color.fromARGB(255, 10, 184, 239),
+              color: Color.fromRGBO(10, 184, 239, 1),
               fontWeight: FontWeight.bold),
         ),
       ),
