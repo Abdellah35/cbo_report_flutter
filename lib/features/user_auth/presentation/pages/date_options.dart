@@ -40,11 +40,11 @@ class DateWidget extends StatelessWidget {
       height: 50,
       width: kSizedBoxWidth,
       child: Container(
-        padding: EdgeInsets.all(kContainerPadding),
+        padding: const EdgeInsets.all(kContainerPadding),
         decoration: BoxDecoration(
           color: kContainerColor,
           borderRadius: BorderRadius.circular(kContainerBorderRadius),
-          boxShadow: [
+          boxShadow: const [
             BoxShadow(
               color: kContainerBoxShadowColor,
               blurRadius: kContainerBoxShadowBlurRadius,
@@ -63,7 +63,7 @@ class DateWidget extends StatelessWidget {
           elevation: kDropdownElevation,
           dropdownColor: kDropdownColor,
           underline: Container(),
-          style: TextStyle(
+          style: const TextStyle(
             color: kTextColor,
             fontSize: kTextFontSize,
             fontWeight: kTextFontWeight,

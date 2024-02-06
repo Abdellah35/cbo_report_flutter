@@ -2,6 +2,7 @@ import 'package:cbo_report/features/user_auth/presentation/pages/sample.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import '../../../../global/common/toast.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -26,6 +27,32 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  Future<bool> _onWillPop() async {
+    final shouldExit = await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Exit'),
+        content: const Text('Do you want to exit the app?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('No'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: const Text('Yes'),
+          ),
+        ],
+      ),
+    );
+
+    if (shouldExit == true) {
+      SystemNavigator.pop();
+    }
+
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
     Stream<QuerySnapshot> documentStream = FirebaseFirestore.instance
@@ -34,30 +61,33 @@ class _HomePageState extends State<HomePage> {
         .orderBy("time", descending: true)
         .limit(1)
         .snapshots();
-    return StreamBuilder<QuerySnapshot>(
-        stream: documentStream,
-        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else {
-            if (snapshot.hasData) {
-              return getBody(snapshot);
-            } else if (snapshot.hasError) {
-              return Center(child: Text(snapshot.error.toString()));
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: StreamBuilder<QuerySnapshot>(
+          stream: documentStream,
+          builder:
+              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
             } else {
-              return const Center(
-                child: Text("Something is went wrong!"),
-              );
+              if (snapshot.hasData) {
+                return getBody(snapshot);
+              } else if (snapshot.hasError) {
+                return Center(child: Text(snapshot.error.toString()));
+              } else {
+                return const Center(
+                  child: Text("Something is went wrong!"),
+                );
+              }
             }
-          }
-        });
+          }),
+    );
   }
 
   Scaffold getBody(AsyncSnapshot<QuerySnapshot> snapshot) {
     var reportModel = snapshot.data?.docs;
-    print(reportModel?[0]["fbusinessDate"].toString());
-    var today = DateFormat('dd-MMM-yyyy').format(DateTime.now());
-    print(today);
+    var fbDate = reportModel?[0]["fbusinessDate"].toString();
+    var today = formattedBussDate(fbDate);
     return Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
@@ -104,8 +134,8 @@ class _HomePageState extends State<HomePage> {
                     const Icon(Icons.calendar_today, color: Colors.white),
                     const SizedBox(width: 8),
                     Text(
-                      "Business Date: ${today}",
-                      style: TextStyle(
+                      "Business Date: $today",
+                      style: const TextStyle(
                           fontSize: 18.0,
                           fontWeight: FontWeight.bold,
                           color: Colors.white),
@@ -176,7 +206,8 @@ class _HomePageState extends State<HomePage> {
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
                                   Text(
-                                    '${abbreviateNumber(int.parse(reportModel?[0]["noDebit"]))}',
+                                    abbreviateNumber(
+                                        int.parse(reportModel?[0]["noDebit"])),
                                     style: const TextStyle(
                                       color: Color.fromARGB(255, 10, 184, 239),
                                       fontSize: 16,
@@ -235,7 +266,8 @@ class _HomePageState extends State<HomePage> {
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
                                   Text(
-                                    '${abbreviateNumber(int.parse(reportModel?[0]["noCredit"]))}',
+                                    abbreviateNumber(
+                                        int.parse(reportModel?[0]["noCredit"])),
                                     style: const TextStyle(
                                       color: Color.fromARGB(255, 10, 184, 239),
                                       fontSize: 16,
@@ -391,5 +423,16 @@ class _HomePageState extends State<HomePage> {
         );
       },
     );
+  }
+
+  String formattedBussDate(var fbDate) {
+    String year = fbDate!.substring(0, 4);
+    String month = fbDate.substring(4, 6);
+    String day = fbDate.substring(6);
+
+    var formattedDate = DateFormat('yyyy-MM-dd').parse('$year-$month-$day');
+    var today = DateFormat('dd-MMM-yyyy').format(formattedDate);
+
+    return today;
   }
 }
