@@ -29,7 +29,7 @@ class _DetailsState extends State<Details> {
   var startOfWeek;
   var startOfMonth;
   var reportModelList;
-
+  var totalDaysofMonth;
   @override
   Widget build(BuildContext context) {
     today = DateFormat('yyyyMMdd').format(DateTime.now());
@@ -39,7 +39,6 @@ class _DetailsState extends State<Details> {
         DateTime.now().subtract(Duration(days: DateTime.now().weekday - 1)));
     startOfMonth = DateFormat('yyyyMMdd').format(
         DateTime.now().subtract(Duration(days: DateTime.now().day - 1)));
-
     Stream<QuerySnapshot> documentStream = FirebaseFirestore.instance
         .collection('daily-report')
         .orderBy("fbusinessDate", descending: false)
@@ -99,6 +98,7 @@ class _DetailsState extends State<Details> {
     var thisWeek = [];
     var todayData = [];
     var thisMonth = [];
+    print(startOfWeek);
     for (int i = 1; i < reportModelList?.length; i++) {
       if (int.parse(reportModelList?[i]['fbusinessDate']) >= int.parse(today)) {
         todayData.add(reportModelList?[i]);
@@ -268,12 +268,14 @@ class _DetailsState extends State<Details> {
     List<FlSpot> nonCashData = [];
 
     var maxXValue = 6.0;
+    bool showDots = true;
     Widget Function(double, TitleMeta) selectedDate;
 
     switch (selectedDateRange) {
       case 'Today':
         selectedDate = CustomTitles.bottomTitleHoursWidgets;
         maxXValue = 6.0;
+        showDots = true;
         creditData = [];
         debitData = [];
         nonCashData = [];
@@ -311,6 +313,7 @@ class _DetailsState extends State<Details> {
       case 'This Week':
         selectedDate = CustomTitles.bottomTitleWeekWidgets;
         maxXValue = 6.0;
+        showDots = true;
         creditData.add(const FlSpot(0, 0.0));
         debitData.add(const FlSpot(0, 0.0));
         double k = 1.0;
@@ -339,32 +342,21 @@ class _DetailsState extends State<Details> {
         break;
       case 'This Month':
         selectedDate = CustomTitles.bottomTitleMonthWidgets;
-        maxXValue = 4.0;
+        maxXValue = 31;
+        showDots = false;
         creditData.add(const FlSpot(0, 0.0));
         debitData.add(const FlSpot(0, 0.0));
         nonCashData.add(const FlSpot(0, 0.0));
         double m = 1.0;
-        int days = 0;
-        double avgCr = 0;
-        double avgDr = 0;
-        double avgNonCash = 0;
         for (int i = 0; i < thisMonth?.length; i++) {
           if (thisMonth?[i]['time'] == 14) {
-            if (days < 6) {
-              avgCr += double.parse(thisMonth?[i]['noCredit']) / 10000;
-              avgDr += double.parse(thisMonth?[i]['noDebit']) / 10000;
-              avgNonCash += double.parse(thisMonth?[i]['noTr']) / 10000;
-              days += 1;
-            } else {
-              creditData.add(FlSpot(m, avgCr / days));
-              debitData.add(FlSpot(m, avgDr / days));
-              nonCashData.add(FlSpot(m, avgNonCash / days));
-              m += 1;
-              avgCr = 0;
-              avgDr = 0;
-              avgNonCash = 0;
-              days = 0;
-            }
+            creditData.add(
+                FlSpot(m, double.parse(thisMonth?[i]['noCredit']) / 10000));
+            debitData
+                .add(FlSpot(m, double.parse(thisMonth?[i]['noDebit']) / 10000));
+            nonCashData
+                .add(FlSpot(m, double.parse(thisMonth?[i]['noTr']) / 10000));
+            m += 1;
           }
         }
         break;
@@ -480,10 +472,10 @@ class _DetailsState extends State<Details> {
                   .lerp(0.1)!,
             ],
           ),
-          barWidth: 5,
+          barWidth: 3,
           isStrokeCapRound: true,
-          dotData: const FlDotData(
-            show: true,
+          dotData: FlDotData(
+            show: showDots,
           ),
           belowBarData: BarAreaData(
             show: true,
@@ -509,12 +501,14 @@ class _DetailsState extends State<Details> {
     List<FlSpot> nonCashAmtData = [];
 
     var maxXValue = 6.0;
+    bool showDots = true;
     Widget Function(double, TitleMeta) selectedDate;
 
     switch (selectedDateRange) {
       case 'Today':
         selectedDate = CustomTitles.bottomTitleHoursWidgets;
         maxXValue = 6.0;
+        showDots = true;
         creditAmtData.add(const FlSpot(0, 0.0));
         debitAmtData.add(const FlSpot(0, 0.0));
         nonCashAmtData.add(const FlSpot(0, 0.0));
@@ -551,6 +545,7 @@ class _DetailsState extends State<Details> {
       case 'This Week':
         selectedDate = CustomTitles.bottomTitleWeekWidgets;
         maxXValue = 6.0;
+        showDots = true;
         creditAmtData.add(const FlSpot(0, 0.0));
         double m = 1.0;
         debitAmtData.add(const FlSpot(0, 0.0));
@@ -580,33 +575,22 @@ class _DetailsState extends State<Details> {
         break;
       case 'This Month':
         selectedDate = CustomTitles.bottomTitleMonthWidgets;
-        maxXValue = 4.0;
+        maxXValue = 31;
+        showDots = false;
         creditAmtData.add(const FlSpot(0, 0.0));
         debitAmtData.add(const FlSpot(0, 0.0));
         nonCashAmtData.add(const FlSpot(0, 0.0));
         double m = 1.0;
-        int days = 0;
-        double avgCr = 0;
-        double avgDr = 0;
-        double avgNonCash = 0;
         for (int i = 0; i < thisMonth?.length; i++) {
           if (thisMonth?[i]['time'] == 14) {
-            if (days < 6) {
-              avgCr += double.parse(thisMonth?[i]['ttlCrAmt']) / 100000000;
-              avgDr += double.parse(thisMonth?[i]['ttlDrAmt']) / 100000000;
-              avgNonCash +=
-                  double.parse(thisMonth?[i]['ttlAmount']) / 1000000000;
-              days += 1;
-            } else {
-              creditAmtData.add(FlSpot(m, avgCr / days));
-              debitAmtData.add(FlSpot(m, avgDr / days));
-              nonCashAmtData.add(FlSpot(m, avgNonCash / days));
-              m += 1;
-              avgCr = 0;
-              avgDr = 0;
-              avgNonCash = 0;
-              days = 0;
-            }
+            print(i);
+            creditAmtData.add(
+                FlSpot(m, double.parse(thisMonth?[i]['ttlCrAmt']) / 100000000));
+            debitAmtData.add(
+                FlSpot(m, double.parse(thisMonth?[i]['ttlDrAmt']) / 100000000));
+            nonCashAmtData.add(FlSpot(
+                m, double.parse(thisMonth?[i]['ttlAmount']) / 1000000000));
+            m += 1.0;
           }
         }
         break;
@@ -649,7 +633,7 @@ class _DetailsState extends State<Details> {
         drawHorizontalLine: false,
         drawVerticalLine: false,
         verticalInterval: 2,
-        horizontalInterval: 1,
+        horizontalInterval: 5,
         getDrawingVerticalLine: (value) {
           return const FlLine(
             color: Color(0xff37434d),
@@ -670,7 +654,7 @@ class _DetailsState extends State<Details> {
             showTitles: true,
             reservedSize: 30,
             getTitlesWidget: selectedDate,
-            interval: 1,
+            interval: 1.0,
           ),
         ),
         leftTitles: AxisTitles(
@@ -720,10 +704,10 @@ class _DetailsState extends State<Details> {
                   .lerp(0.2)!,
             ],
           ),
-          barWidth: 5,
+          barWidth: 3,
           isStrokeCapRound: true,
-          dotData: const FlDotData(
-            show: true,
+          dotData: FlDotData(
+            show: showDots,
           ),
           belowBarData: BarAreaData(
             show: true,

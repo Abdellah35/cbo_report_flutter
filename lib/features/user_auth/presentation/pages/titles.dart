@@ -46,16 +46,97 @@ class CustomTitles {
     Widget text;
     switch (value.toInt()) {
       case 1:
-        text = const Text('7', style: style);
+        text = const Text('1', style: style);
         break;
       case 2:
-        text = const Text('15', style: style);
+        text = const Text('', style: style);
         break;
       case 3:
-        text = const Text('21', style: style);
+        text = const Text('', style: style);
         break;
       case 4:
-        text = const Text('30', style: style);
+        text = const Text('', style: style);
+        break;
+      case 5:
+        text = const Text('5', style: style);
+        break;
+      case 6:
+        text = const Text('', style: style);
+        break;
+      case 7:
+        text = const Text('', style: style);
+        break;
+      case 8:
+        text = const Text('', style: style);
+        break;
+      case 9:
+        text = const Text('', style: style);
+        break;
+      case 10:
+        text = const Text('10', style: style);
+        break;
+      case 11:
+        text = const Text('', style: style);
+        break;
+      case 12:
+        text = const Text('', style: style);
+        break;
+      case 13:
+        text = const Text('', style: style);
+        break;
+      case 14:
+        text = const Text('', style: style);
+        break;
+      case 15:
+        text = const Text('15', style: style);
+        break;
+      case 16:
+        text = const Text('1', style: style);
+        break;
+      case 17:
+        text = const Text('', style: style);
+        break;
+      case 18:
+        text = const Text('', style: style);
+        break;
+      case 19:
+        text = const Text('', style: style);
+        break;
+      case 20:
+        text = const Text('20', style: style);
+        break;
+      case 21:
+        text = const Text('', style: style);
+        break;
+      case 22:
+        text = const Text('', style: style);
+        break;
+      case 23:
+        text = const Text('', style: style);
+        break;
+      case 24:
+        text = const Text('', style: style);
+        break;
+      case 25:
+        text = const Text('25', style: style);
+        break;
+      case 26:
+        text = const Text('', style: style);
+        break;
+      case 27:
+        text = const Text('', style: style);
+        break;
+      case 28:
+        text = const Text('', style: style);
+        break;
+      case 29:
+        text = const Text('', style: style);
+        break;
+      case 30:
+        text = const Text('', style: style);
+        break;
+      case 31:
+        text = const Text('31', style: style);
         break;
       default:
         text = const Text('', style: style);
