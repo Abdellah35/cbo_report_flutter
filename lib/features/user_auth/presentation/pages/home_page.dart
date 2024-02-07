@@ -31,16 +31,33 @@ class _HomePageState extends State<HomePage> {
     final shouldExit = await showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Exit'),
-        content: const Text('Do you want to exit the app?'),
+        title: const Text(
+          'Exit',
+          style: TextStyle(
+              color: Color.fromRGBO(10, 184, 239, 1),
+              fontWeight: FontWeight.bold),
+        ),
+        content: const Text(
+          'Do you want to exit the app?',
+          style: TextStyle(
+              color: Color.fromRGBO(10, 184, 239, 1),
+              fontWeight: FontWeight.bold),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
-            child: const Text('No'),
+            child: const Text(
+              'No',
+              style:
+                  TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
+            ),
           ),
           TextButton(
             onPressed: () => Navigator.of(context).pop(true),
-            child: const Text('Yes'),
+            child: const Text(
+              'Yes',
+              style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+            ),
           ),
         ],
       ),
