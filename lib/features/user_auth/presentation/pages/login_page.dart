@@ -18,7 +18,8 @@ class _LoginPageState extends State<LoginPage> {
   bool _isSigning = false;
   final FirebaseAuthService _auth = FirebaseAuthService();
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-  final TextEditingController _emailController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  final _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
   @override
@@ -46,7 +47,6 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Add this code to insert an image with a circle white background layer
               Container(
                 width: 150,
                 height: 150,
@@ -55,36 +55,56 @@ class _LoginPageState extends State<LoginPage> {
                   color: Color.fromARGB(1, 3, 174, 237),
                 ),
                 child: Image.asset(
-                  'assets/images/Cooplogo.png', // Replace this with your image path
+                  'assets/images/Cooplogo.png',
                   fit: BoxFit.contain,
                 ),
               ),
               const SizedBox(
                 height: 20,
               ),
-              // End of added code
               const SizedBox(
                 height: 30,
               ),
-              FormContainerWidget(
-                controller: _emailController,
-                hintText: "Email",
-                isPasswordField: false,
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              FormContainerWidget(
-                controller: _passwordController,
-                hintText: "Password",
-                isPasswordField: true,
+              Form(
+                key: _formKey, // Add this
+                child: Column(
+                  children: [
+                    TextFormField(
+                      controller: _emailController,
+                      decoration: InputDecoration(hintText: "Email"),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your email';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TextFormField(
+                      controller: _passwordController,
+                      decoration: InputDecoration(hintText: "Password"),
+                      obscureText: true,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your password';
+                        }
+                        return null;
+                      },
+                    ),
+                  ],
+                ),
               ),
               const SizedBox(
                 height: 30,
               ),
               GestureDetector(
                 onTap: () {
-                  _signIn();
+                  if (_formKey.currentState!.validate()) {
+                    // Add this
+                    _signIn();
+                  }
                 },
                 child: Container(
                   width: double.infinity,
